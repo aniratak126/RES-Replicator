@@ -13,7 +13,7 @@ class Replicator:
     def send_data(self, data):
         # Forward the data to the ReplicatorReceiver
         self.receiver.receive_data(data)
-    def send_to_reader(self):
+    def send_to_reader(self, data):
         return 'TO DO'
         # Sent to the reader
         # Send the data to the appropriate Reader based on the dataset
