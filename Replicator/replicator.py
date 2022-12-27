@@ -13,6 +13,17 @@ class Replicator:
     def send_data(self, data):
         # Forward the data to the ReplicatorReceiver
         self.receiver.receive_data(data)
+    def send_to_reader(self):
+        return 'TO DO'
+        # Sent to the reader
+        # Send the data to the appropriate Reader based on the dataset
+        # dataset = input("Enter the dataset (A, B, C): ")
+        # if dataset == 'A':
+            # reader_a.receive_data(self.data)
+        # elif dataset == 'B':
+            # reader_b.receive_data(self.data)
+        # elif dataset == 'C':
+            # reader_c.receive_data(self.data)
 
 class ReplicatorSender:
     def __init__(self, parent):
@@ -43,18 +54,8 @@ class ReplicatorReceiver:
         self.data = data
         data_obj = pickle.loads(self.data)
         print(f'Data successfully received: user id: {data_obj.id} consumption: {data_obj.consumption}')
+        self.parent.send_to_reader(self.data)
 
-    def send_to_reader(self):
-        return 'TO DO'
-        # Sent to the reader
-        # Send the data to the appropriate Reader based on the dataset
-        # dataset = input("Enter the dataset (A, B, C): ")
-        # if dataset == 'A':
-            # reader_a.receive_data(self.data)
-        # elif dataset == 'B':
-            # reader_b.receive_data(self.data)
-        # elif dataset == 'C':
-            # reader_c.receive_data(self.data)
 if __name__ == '__main__':
     replicator = Replicator()
     replicator.run()
