@@ -1,7 +1,7 @@
 import socket
 import pickle
 
-from Replicator.data import Data
+from data import Data
 
 
 class Writer:
