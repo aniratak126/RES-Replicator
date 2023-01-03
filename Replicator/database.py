@@ -49,7 +49,8 @@ def update_consumer(id, consumption, month, db_name = 'consumers.db'):
     consumer = cur.fetchone()
     if consumer == None:
         print("Consumer does not exists.")
-        #return 0
+        conn.close()
+        return 0
 
     cur.execute("""SELECT * FROM consumption_info WHERE consumer_id = ? AND month = ?""", (id, month))
     data = cur.fetchone()
@@ -61,6 +62,7 @@ def update_consumer(id, consumption, month, db_name = 'consumers.db'):
 
     conn.commit()
     conn.close()
+
 
 #def delete_consumer(id, db_name = 'consumers_db'):
 #    conn = sqlite3.connect(db_name)
