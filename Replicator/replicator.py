@@ -1,5 +1,6 @@
 import socket
 import pickle
+
 class Replicator:
     def __init__(self):
         # Create the sender and receiver components
@@ -13,17 +14,7 @@ class Replicator:
     def send_data(self, data):
         # Forward the data to the ReplicatorReceiver
         self.receiver.receive_data(data)
-    def send_to_reader(self, data):
-        return 'TO DO'
-        # Sent to the reader
-        # Send the data to the appropriate Reader based on the dataset
-        # dataset = input("Enter the dataset (A, B, C): ")
-        # if dataset == 'A':
-            # reader_a.receive_data(self.data)
-        # elif dataset == 'B':
-            # reader_b.receive_data(self.data)
-        # elif dataset == 'C':
-            # reader_c.receive_data(self.data)
+
 
 class ReplicatorSender:
     def __init__(self, parent):
@@ -50,11 +41,28 @@ class ReplicatorReceiver:
         self.parent = parent
         self.data = None
 
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect(('localhost', 8001))
+
     def receive_data(self, data):
         self.data = data
         data_obj = pickle.loads(self.data)
         print(f'Data successfully received: user id: {data_obj.id} consumption: {data_obj.consumption}')
-        self.parent.send_to_reader(self.data)
+        self.send_to_reader(self.data)
+
+    def send_to_reader(self, data):
+
+        # Send to the reader
+        self.client_socket.sendall(self.data)
+
+        # Send the data to the appropriate Reader based on the dataset
+        # dataset = input("Enter the dataset (A, B, C): ")
+        # if dataset == 'A':
+            # reader_a.receive_data(self.data)
+        # elif dataset == 'B':
+            # reader_b.receive_data(self.data)
+        # elif dataset == 'C':
+            # reader_c.receive_data(self.data)
 
 if __name__ == '__main__':
     replicator = Replicator()

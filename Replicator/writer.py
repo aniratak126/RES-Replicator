@@ -12,6 +12,5 @@ class Writer:
     def send_data(self, user_id, consumption):
         # Serialize the data object using pickle
         data_bytes = pickle.dumps(Data(user_id, consumption))
-        # First solution -> data = f"{user_id},{consumption}"
         self.client_socket.sendall(data_bytes)
 

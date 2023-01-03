@@ -65,7 +65,7 @@ class Reader:
             data = pickle.loads(self.data)
             print(f'Data successfully received: user id: {data.id} consumption: {data.consumption}')
 
-            print("Enter moth of consumption: ")
+            print("Enter month of consumption: ")
             try:
                 month = int(input())
             except:
