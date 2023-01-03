@@ -15,7 +15,7 @@ def create_tables(db_name = 'consumers.db'):
                                                             postal_code integer,
                                                             city text)  """)
 
-    statement_table2 = ("""CREATE TABLE IF NOT EXISTS consumption (consumer_id integer,
+    statement_table2 = ("""CREATE TABLE IF NOT EXISTS consumption_info (consumer_id integer,
                                                                 consumption real,
                                                                 month text)""")
     
@@ -38,6 +38,27 @@ def add_consumer(id, name, last_name, street, street_num, postal_code, city, db_
     except sqlite3.IntegrityError:
         raise sqlite3.IntegrityError("User with this id already exists")
     
+    conn.commit()
+    conn.close()
+
+def update_consumer(id, consumption, month, db_name = 'consumers.db'):
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+
+    cur.execute("""SELECT * FROM consumers WHERE id = ?""", (id, ))
+    consumer = cur.fetchone()
+    if consumer == None:
+        print("Consumer does not exists.")
+        #return 0
+
+    cur.execute("""SELECT * FROM consumption_info WHERE consumer_id = ? AND month = ?""", (id, month))
+    data = cur.fetchone()
+
+    if data:
+        cur.execute("""UPDATE consumption_info SET consumption = consumption + ? WHERE consumer_id = ? AND month = ?""", (consumption, id, month))
+    else:
+        cur.execute("""INSERT INTO consumption_info VALUES(?,?,?)""", (id, consumption, month))
+
     conn.commit()
     conn.close()
 
@@ -75,8 +96,19 @@ def read_consumer(id, db_name = 'consumers.db'):
     
     return data
 
+def consumption_info(db_name = 'consumers.db'):
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+
+    cur.execute("""SELECT * FROM consumption_info """)
+    
+    data = cur.fetchall()
+    conn.close()
+    
+    return data
+
 if __name__ == "__main__": # pragma: no cover
     create_tables()
-    print(read_consumer(1))
+    #print(consumption_info())
 
     
