@@ -109,6 +109,7 @@ def consumption_info(db_name = 'consumers.db'):
 
 if __name__ == "__main__": # pragma: no cover
     create_tables()
+    #print(read_all_consumers())
     #print(consumption_info())
 
     
