@@ -17,7 +17,7 @@ def create_tables(db_name = 'consumers.db'):
 
     statement_table2 = ("""CREATE TABLE IF NOT EXISTS consumption_info (consumer_id integer,
                                                                 consumption real,
-                                                                month text)""")
+                                                                month integer)""")
     
     cur.execute(statement_table1)
     cur.execute(statement_table2)
@@ -88,12 +88,19 @@ def read_all_consumers( db_name = 'consumers.db'):
     return data
 
 def read_consumer(id, db_name = 'consumers.db'):
+    data = None
     conn = sqlite3.connect(db_name)
     cur = conn.cursor()
 
     cur.execute("""SELECT * FROM consumers WHERE id = ?""", (id,))
     
     data = cur.fetchone()
+
+    if data == None:
+        conn.close()
+        print("User does not exists.")
+        return 0
+
     conn.close()
     
     return data
@@ -109,8 +116,17 @@ def consumption_info(db_name = 'consumers.db'):
     
     return data
 
+"""def drop(db_name = 'consumers.db'):
+        conn = sqlite3.connect(db_name)
+        cur = conn.cursor()
+        cur.execute('DROP TABLE consumers;')
+        cur.execute('DROP TABLE consumption_info;')
+        conn.commit()
+        conn.close()"""
+
 if __name__ == "__main__": # pragma: no cover
     create_tables()
+    #update_consumer(1,10,1)
     #print(read_all_consumers())
     #print(consumption_info())
 
