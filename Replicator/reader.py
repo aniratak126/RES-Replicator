@@ -42,22 +42,13 @@ def menu():
 
 
 class Reader:
-    def run(self):
-        self.receive_data()
-
     def __init__(self):
         self.data = None
 
-        # Create a server socket to listen for incoming connections
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('localhost', 8001))
-        self.server_socket.listen()
-
-    def receive_data(self):
+    def receive_data(self, server_socket):
         # Accept an incoming connection from the Replicator component
         while True:
-
-            connection, address = self.server_socket.accept()
+            connection, address = server_socket.accept()
             with connection:
                 # Receive the data from the Replicator component
                 self.data = connection.recv(1024)
@@ -82,9 +73,5 @@ class Reader:
                 raise Exception()            
 
         
-if __name__ == '__main__':
-    menu()
-    reader = Reader()
-    reader.run()
-    
+
     

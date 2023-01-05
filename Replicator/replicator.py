@@ -1,6 +1,7 @@
 import socket
 import pickle
 
+
 class Replicator:
     def __init__(self):
         # Create the sender and receiver components
@@ -36,13 +37,13 @@ class ReplicatorSender:
         # Forward the data to the Replicator component
         self.parent.send_data(self.data)
 
+
 class ReplicatorReceiver:
     def __init__(self, parent):
         self.parent = parent
         self.data = None
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(('localhost', 8001))
 
     def receive_data(self, data):
         self.data = data
@@ -53,16 +54,18 @@ class ReplicatorReceiver:
     def send_to_reader(self, data):
 
         # Send to the reader
-        self.client_socket.sendall(self.data)
-
         # Send the data to the appropriate Reader based on the dataset
-        # dataset = input("Enter the dataset (A, B, C): ")
-        # if dataset == 'A':
-            # reader_a.receive_data(self.data)
-        # elif dataset == 'B':
-            # reader_b.receive_data(self.data)
-        # elif dataset == 'C':
-            # reader_c.receive_data(self.data)
+        dataset = input("Enter the reader (A, B, C): ")
+        if dataset == 'A':
+            self.client_socket.connect(('localhost', 8006))
+            self.client_socket.sendall(self.data)
+        elif dataset == 'B':
+            self.client_socket.connect(('localhost', 8007))
+            self.client_socket.sendall(self.data)
+        elif dataset == 'C':
+            self.client_socket.connect(('localhost', 8008))
+            self.client_socket.sendall(self.data)
+
 
 if __name__ == '__main__':
     replicator = Replicator()
