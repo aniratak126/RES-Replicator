@@ -1,6 +1,6 @@
 import socket
 import pickle
-from database import read_all_consumers, read_consumer, update_consumer
+from database import read_all_consumers, read_consumer, update_consumer, add_consumer
 
 def read_all_cons(db_name = 'consumers.db'):
     print("******* All Consumers *******")
@@ -54,25 +54,45 @@ class Reader:
                 self.data = connection.recv(1024)
 
             data = pickle.loads(self.data)
-            print(f'Data successfully received: user id: {data.id} consumption: {data.consumption}')
+            print(f'Data successfully received: user id: {data.id}\nChoose option:')
+            print("1. Add new consumer.")
+            print("2. Add consumption.")
 
-            print("Enter month of consumption: ")
             try:
-                month = int(input())
+                option = int(input())
             except:
-                print("Input must be an integer")
-                return 0
+                print("Option must be an integer")
 
-            if month < 1 or month > 12:
-                print("Invalid input")
-                return 0
+            if option == 1:
+                try:
+                    if add_consumer(data.id, data.name, data.last_name, data.street, data.street_num, data.postal_code, data.city, 'consumers.db'):
+                        print("Added successfully.")
+                    else:
+                        print('Consumer already exists.')
+                except:
+                    raise Exception()
+                menu()
 
-            try:
-                update_consumer(data.id, data.consumption, month)
-            except: 
-                raise Exception()
+            elif option == 2:
+                print("Enter month of consumption: ")
+                try:
+                    month = int(input())
+                except:
+                    print("Input must be an integer")
+                    return 0
 
-            menu()
+                if month < 1 or month > 12:
+                    print("Invalid input")
+                    return 0
+
+                try:
+                    update_consumer(data.id, data.consumption, month)
+                except:
+                    raise Exception()
+                menu()
+            else:
+                print('Invalid input.')
+                menu()
         
 
     

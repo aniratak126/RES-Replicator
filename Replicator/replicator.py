@@ -24,7 +24,7 @@ class ReplicatorSender:
 
         # Create a server socket to listen for incoming connections
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('localhost', 9004))
+        self.server_socket.bind(('localhost', 8004))
         self.server_socket.listen()
 
     def receive_data(self):
@@ -48,7 +48,7 @@ class ReplicatorReceiver:
     def receive_data(self, data):
         self.data = data
         data_obj = pickle.loads(self.data)
-        print(f'Data successfully received: user id: {data_obj.id} consumption: {data_obj.consumption}')
+        print(f'Data successfully received: user id: {data_obj.id}')
         self.send_to_reader(self.data)
 
     def send_to_reader(self, data):
@@ -57,13 +57,13 @@ class ReplicatorReceiver:
         # Send the data to the appropriate Reader based on the dataset
         dataset = input("Enter the reader (A, B, C): ")
         if dataset == 'A':
-            self.client_socket.connect(('localhost', 9001))
+            self.client_socket.connect(('localhost', 6001))
             self.client_socket.sendall(self.data)
         elif dataset == 'B':
-            self.client_socket.connect(('localhost', 9002))
+            self.client_socket.connect(('localhost', 6002))
             self.client_socket.sendall(self.data)
         elif dataset == 'C':
-            self.client_socket.connect(('localhost', 9003))
+            self.client_socket.connect(('localhost', 6003))
             self.client_socket.sendall(self.data)
 
 
