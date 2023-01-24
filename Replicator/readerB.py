@@ -8,7 +8,7 @@ class ReaderB(Reader):
         self.data = None
         # Create a server socket to listen for incoming connections
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('localhost', 8007))
+        self.server_socket.bind(('localhost', 9002))
 
     def run(self):
         self.server_socket.listen()

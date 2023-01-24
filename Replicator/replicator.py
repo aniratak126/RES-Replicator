@@ -24,7 +24,7 @@ class ReplicatorSender:
 
         # Create a server socket to listen for incoming connections
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('localhost', 8000))
+        self.server_socket.bind(('localhost', 9004))
         self.server_socket.listen()
 
     def receive_data(self):
@@ -57,13 +57,13 @@ class ReplicatorReceiver:
         # Send the data to the appropriate Reader based on the dataset
         dataset = input("Enter the reader (A, B, C): ")
         if dataset == 'A':
-            self.client_socket.connect(('localhost', 8006))
+            self.client_socket.connect(('localhost', 9001))
             self.client_socket.sendall(self.data)
         elif dataset == 'B':
-            self.client_socket.connect(('localhost', 8007))
+            self.client_socket.connect(('localhost', 9002))
             self.client_socket.sendall(self.data)
         elif dataset == 'C':
-            self.client_socket.connect(('localhost', 8008))
+            self.client_socket.connect(('localhost', 9003))
             self.client_socket.sendall(self.data)
 
 

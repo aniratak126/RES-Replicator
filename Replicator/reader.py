@@ -24,7 +24,7 @@ def menu():
         print("******* Enter Option *******")
         print("1. List All Consumers.")
         print("2. List One Consumer by ID.")
-        print("Press 0 to exit.")
+        print("Press 0 to receive data.")
         try:
             option = int(input())    
         except:
@@ -70,8 +70,9 @@ class Reader:
             try:
                 update_consumer(data.id, data.consumption, month)
             except: 
-                raise Exception()            
+                raise Exception()
 
+            menu()
         
 
     

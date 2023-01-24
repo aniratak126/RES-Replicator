@@ -7,7 +7,7 @@ from data import Data
 class Writer:
     def __init__(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(('localhost', 8000))
+        self.client_socket.connect(('localhost', 9004))
 
     def send_data(self, user_id, consumption):
         # Serialize the data object using pickle
