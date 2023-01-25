@@ -1,6 +1,7 @@
+import random
 import socket
 import pickle
-
+import threading
 
 class Replicator:
     def __init__(self):
@@ -24,18 +25,19 @@ class ReplicatorSender:
 
         # Create a server socket to listen for incoming connections
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('localhost', 8004))
+        self.server_socket.bind(('localhost', 8000))
         self.server_socket.listen()
 
     def receive_data(self):
+        #while True:
         # Accept an incoming connection from the Writer component
         connection, address = self.server_socket.accept()
         with connection:
             # Receive the data from the Writer component
             self.data = connection.recv(1024)
 
-        # Forward the data to the Replicator component
-        self.parent.send_data(self.data)
+            # Forward the data to the Replicator component
+            self.parent.send_data(self.data)
 
 
 class ReplicatorReceiver:
@@ -55,7 +57,8 @@ class ReplicatorReceiver:
 
         # Send to the reader
         # Send the data to the appropriate Reader based on the dataset
-        dataset = input("Enter the reader (A, B, C): ")
+        list = ["A", "B", "C"]
+        dataset = random.choice(list)
         if dataset == 'A':
             self.client_socket.connect(('localhost', 6001))
             self.client_socket.sendall(self.data)

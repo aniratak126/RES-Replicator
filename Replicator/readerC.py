@@ -22,5 +22,4 @@ class ReaderC(Reader):
 
 if __name__ == '__main__':
     readerC = ReaderC()
-    menu()
     readerC.run()

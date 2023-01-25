@@ -20,25 +20,25 @@ def read_one_cons(db_name = 'consumers.db'):
     print(str(info))
 
 def menu():
-    while True:
         print("******* Enter Option *******")
         print("1. List All Consumers.")
         print("2. List One Consumer by ID.")
-        print("Press 0 to receive data.")
+        print("3. Receive data.")
         try:
             option = int(input())    
         except:
             print("Option must be an integer")
-            return 0
+            menu()
 
         if option == 1:
             read_all_cons()
         elif option == 2:
             read_one_cons()
-        elif option == 0:
+        elif option == 3:
             return 0
         else:
             print("Invalid input, try again.")
+
 
 
 class Reader:
@@ -48,18 +48,17 @@ class Reader:
     def receive_data(self, server_socket):
         # Accept an incoming connection from the Replicator component
         while True:
+            menu()
             connection, address = server_socket.accept()
             with connection:
                 # Receive the data from the Replicator component
                 self.data = connection.recv(1024)
 
             data = pickle.loads(self.data)
-            print(f'Data successfully received: user id: {data.id}\nChoose option:')
-            print("1. Add new consumer.")
-            print("2. Add consumption.")
+            print(f'Data successfully received: user id: {data.id}')
 
             try:
-                option = int(input())
+                option = data.choice
             except:
                 print("Option must be an integer")
 
@@ -71,7 +70,6 @@ class Reader:
                         print('Consumer already exists.')
                 except:
                     raise Exception()
-                menu()
 
             elif option == 2:
                 print("Enter month of consumption: ")
@@ -89,10 +87,8 @@ class Reader:
                     update_consumer(data.id, data.consumption, month)
                 except:
                     raise Exception()
-                menu()
             else:
                 print('Invalid input.')
-                menu()
         
 
     

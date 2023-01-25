@@ -32,7 +32,7 @@ if __name__ == '__main__':
             except:
                 print('Invalid input.')
 
-            data = NewUser(id, name, last_name, street, street_num, postal_code, city)
+            data = NewUser(id, name, last_name, street, street_num, postal_code, city, option)
             writer.send_data(data)
 
         elif option == 2:
@@ -42,7 +42,7 @@ if __name__ == '__main__':
             except:
                 print("Invalid input.")
             if consumption > 0 and user_id > 0:
-                data = Data(user_id, consumption)
+                data = Data(user_id, consumption, option)
                 writer.send_data(data)
             else:
                 print("Consumption and Id must be a positive number!")
