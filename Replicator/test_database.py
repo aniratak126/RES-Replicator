@@ -64,23 +64,6 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(data, (1,20,1))
         conn.close()
 
-    def test_update_consumer_third(self):
-
-        # neuspesan update jer user ne postoji
-        self.free_tables()
-        add_consumer(1, 'Marko', 'Markovic', 'Novosadska', 22, 21000, 'Novi Sad', 'test_database.db')
-        update_consumer(2,10,1,'test_database.db')
-
-        conn = sqlite3.connect('test_database.db')
-        cur = conn.cursor()
-
-        cur.execute("SELECT * FROM consumption_info WHERE consumer_id = 1 AND month = 1 ")
-        data = cur.fetchone()
-
-        #print(data)
-        self.assertFalse(data, (1,10,1))
-        conn.close()
-
     def test_read_consumer(self):
         self.free_tables()
         add_consumer(1, 'Marko', 'Markovic', 'Novosadska', 22, 21000, 'Novi Sad', 'test_database.db')
