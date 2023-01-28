@@ -32,14 +32,21 @@ def add_consumer(id, name, last_name, street, street_num, postal_code, city, db_
     conn = sqlite3.connect(db_name)
     cur = conn.cursor()
 
-    try:
-        cur.execute("""INSERT INTO consumers (id, name, last_name, street, street_num, postal_code, city)
-                                        VALUES(?, ?, ?, ?, ?, ?, ?)""", (id, name, last_name, street, street_num, postal_code, city))
-    except sqlite3.IntegrityError:
-        raise sqlite3.IntegrityError("User with this id already exists")
+    cur.execute("""SELECT * FROM consumers WHERE id = ?""", (id,))
+    consumer = cur.fetchone()
+
+    if consumer == None:
+        try:
+            cur.execute("""INSERT INTO consumers (id, name, last_name, street, street_num, postal_code, city)
+                                            VALUES(?, ?, ?, ?, ?, ?, ?)""", (id, name, last_name, street, street_num, postal_code, city))
+        except sqlite3.IntegrityError:
+            raise sqlite3.IntegrityError("User with this id already exists")
     
-    conn.commit()
+        conn.commit()
+        conn.close()
+        return True
     conn.close()
+    return False
 
 def update_consumer(id, consumption, month, db_name = 'consumers.db'):
     conn = sqlite3.connect(db_name)
@@ -50,7 +57,6 @@ def update_consumer(id, consumption, month, db_name = 'consumers.db'):
     if consumer == None:
         print("Consumer does not exists.")
         conn.close()
-        return 0
 
     cur.execute("""SELECT * FROM consumption_info WHERE consumer_id = ? AND month = ?""", (id, month))
     data = cur.fetchone()
@@ -62,7 +68,6 @@ def update_consumer(id, consumption, month, db_name = 'consumers.db'):
 
     conn.commit()
     conn.close()
-
 
 #def delete_consumer(id, db_name = 'consumers_db'):
 #    conn = sqlite3.connect(db_name)

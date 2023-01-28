@@ -8,7 +8,7 @@ class ReaderC(Reader):
         self.data = None
         # Create a server socket to listen for incoming connections
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(('localhost', 8008))
+        self.server_socket.bind(('localhost', 6003))
 
     def run(self):
         self.server_socket.listen()
@@ -22,5 +22,4 @@ class ReaderC(Reader):
 
 if __name__ == '__main__':
     readerC = ReaderC()
-    menu()
     readerC.run()

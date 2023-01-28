@@ -1,6 +1,7 @@
+import random
 import socket
 import pickle
-
+import threading
 
 class Replicator:
     def __init__(self):
@@ -28,14 +29,15 @@ class ReplicatorSender:
         self.server_socket.listen()
 
     def receive_data(self):
+        #while True:
         # Accept an incoming connection from the Writer component
         connection, address = self.server_socket.accept()
         with connection:
             # Receive the data from the Writer component
             self.data = connection.recv(1024)
 
-        # Forward the data to the Replicator component
-        self.parent.send_data(self.data)
+            # Forward the data to the Replicator component
+            self.parent.send_data(self.data)
 
 
 class ReplicatorReceiver:
@@ -48,22 +50,23 @@ class ReplicatorReceiver:
     def receive_data(self, data):
         self.data = data
         data_obj = pickle.loads(self.data)
-        print(f'Data successfully received: user id: {data_obj.id} consumption: {data_obj.consumption}')
+        print(f'Data successfully received: user id: {data_obj.id}')
         self.send_to_reader(self.data)
 
     def send_to_reader(self, data):
 
         # Send to the reader
         # Send the data to the appropriate Reader based on the dataset
-        dataset = input("Enter the reader (A, B, C): ")
+        list = ["A", "B", "C"]
+        dataset = random.choice(list)
         if dataset == 'A':
-            self.client_socket.connect(('localhost', 8006))
+            self.client_socket.connect(('localhost', 6001))
             self.client_socket.sendall(self.data)
         elif dataset == 'B':
-            self.client_socket.connect(('localhost', 8007))
+            self.client_socket.connect(('localhost', 6002))
             self.client_socket.sendall(self.data)
         elif dataset == 'C':
-            self.client_socket.connect(('localhost', 8008))
+            self.client_socket.connect(('localhost', 6003))
             self.client_socket.sendall(self.data)
 
 
