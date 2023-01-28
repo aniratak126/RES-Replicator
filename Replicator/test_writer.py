@@ -2,6 +2,7 @@ import socket, unittest, unittest.mock
 from unittest.mock import MagicMock
 from unittest import mock
 from writer import *
+from data import *
 
 class TestWriter(unittest.TestCase):
     """def test_init(self):
@@ -15,7 +16,9 @@ class TestWriter(unittest.TestCase):
         mock_test_send_data.return_value = mock_socket
         tw.client_socket = mock_socket
 
-        self.assertEqual(None, Writer.send_data(tw,1,10))
+        podatak = Data(1,10,0)
+
+        self.assertEqual(None, Writer.send_data(tw,podatak))
 
 if __name__ == "__main__":
     unittest.main()
