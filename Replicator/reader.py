@@ -20,6 +20,7 @@ def read_one_cons(db_name = 'consumers.db'):
     print(str(info))
 
 def menu():
+    while True:
         print("******* Enter Option *******")
         print("1. List All Consumers.")
         print("2. List One Consumer by ID.")
@@ -47,8 +48,8 @@ class Reader:
 
     def receive_data(self, server_socket):
         # Accept an incoming connection from the Replicator component
+        menu()
         while True:
-            menu()
             connection, address = server_socket.accept()
             with connection:
                 # Receive the data from the Replicator component
@@ -89,6 +90,6 @@ class Reader:
                     raise Exception()
             else:
                 print('Invalid input.')
-        
+            menu()
 
     

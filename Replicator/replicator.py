@@ -29,15 +29,15 @@ class ReplicatorSender:
         self.server_socket.listen()
 
     def receive_data(self):
-        #while True:
         # Accept an incoming connection from the Writer component
         connection, address = self.server_socket.accept()
+        #while True:
         with connection:
-            # Receive the data from the Writer component
-            self.data = connection.recv(1024)
-
-            # Forward the data to the Replicator component
-            self.parent.send_data(self.data)
+            while True:
+                self.data = connection.recv(1024)
+                if not self.data:
+                    continue
+                self.parent.send_data(self.data)
 
 
 class ReplicatorReceiver:
@@ -45,7 +45,12 @@ class ReplicatorReceiver:
         self.parent = parent
         self.data = None
 
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socketA = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socketA.connect(('localhost', 6001))
+        self.client_socketB = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socketB.connect(('localhost', 6002))
+        self.client_socketC = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socketC.connect(('localhost', 6003))
 
     def receive_data(self, data):
         self.data = data
@@ -60,14 +65,11 @@ class ReplicatorReceiver:
         list = ["A", "B", "C"]
         dataset = random.choice(list)
         if dataset == 'A':
-            self.client_socket.connect(('localhost', 6001))
-            self.client_socket.sendall(self.data)
+            self.client_socketA.sendall(self.data)
         elif dataset == 'B':
-            self.client_socket.connect(('localhost', 6002))
-            self.client_socket.sendall(self.data)
+            self.client_socketB.sendall(self.data)
         elif dataset == 'C':
-            self.client_socket.connect(('localhost', 6003))
-            self.client_socket.sendall(self.data)
+            self.client_socketC.sendall(self.data)
 
 
 if __name__ == '__main__':
